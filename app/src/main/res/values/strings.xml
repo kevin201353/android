@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MyApp</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">button_send</string>
+    <string name="dialog_fire_missiles">Fire missiles ?</string>
+    <string name="fire">Fire</string>
+    <string name="cancel">Cancel</string>
+    <string name="tip">is Exit ?</string>
+    <string name="btn_cancel">CANCEL</string>
+    <string name="btn_ok">OK</string>
+    <string name="new_game">New_game</string>
+    <string name="help">Help</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+</resources>
