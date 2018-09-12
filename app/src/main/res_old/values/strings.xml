@@ -12,6 +12,4 @@
     <string name="help">Help</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="go">Go</string>
-    <string name="app_welcome_name">登机桥及桥载设备运行调度手机APP V3.0</string>
 </resources>

@@ -6,8 +6,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 public class MyIntentService extends IntentService {
+
     public MyIntentService() {
-        super("com.example.administrator.myapp.MyIntentService");
+        super("MyIntentService");
     }
     public MyIntentService(String name) {
         super(name);

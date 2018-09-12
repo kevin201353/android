@@ -21,8 +21,8 @@ public class TipDlg extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tip_dlg);
-        yesBtn = findViewById(R.id.btn_ok);
-        cancelBtn = findViewById(R.id.btn_cancel);
+        yesBtn = (Button)findViewById(R.id.btn_ok);
+        cancelBtn = (Button) findViewById(R.id.btn_cancel);
         initEvent();
     }
 

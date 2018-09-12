@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
     public void sendMessage(View view) {
         Intent intent = new Intent(MainActivity.this, DisplayMsgActivity.class);
-        EditText ctrlEdit =  findViewById(R.id.textView);
+        EditText ctrlEdit =  (EditText)findViewById(R.id.textView);
         String strMsg = ctrlEdit.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, strMsg);
         startActivity(intent);

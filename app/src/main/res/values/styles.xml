@@ -1,11 +1,20 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- customize the color palette -->
+        <!--<item name="colorPrimary">@color/system_titlebar_bg</item>-->
+        <!--<item name="colorPrimaryDark">@color/system_titlebar_bg</item>-->
+        <!--<item name="colorAccent">@color/system_titlebar_bg</item>-->
+        <!--<item name="toolbarStyle">@style/CusToolbar</item>-->
+
+        <item name="android:windowNoTitle">true</item>//无标题
+        <item name="android:windowActionBar">false</item>//无ActionBar
+        <item name="android:windowFullscreen">true</item>//全屏即无通知栏
+        <item name="android:windowContentOverlay">@null</item>//是否有遮盖
+
     </style>
 
-
+    <!-- Base application theme. -->
     <style name="TipDlg" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item><!--边框-->
         <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->

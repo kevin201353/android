@@ -24,7 +24,7 @@ public class DisplayMsgActivity extends Activity implements Runnable{
             switch (msg.what) {
                 case 1:
                 {
-                    TextView ctrlText = findViewById(R.id.textView2);
+                    TextView ctrlText = (TextView)findViewById(R.id.textView2);
                     ctrlText.setText(String.valueOf(msg.obj));
                 }
                 break;
@@ -38,7 +38,7 @@ public class DisplayMsgActivity extends Activity implements Runnable{
         setContentView(R.layout.activity_display_msg);
         Intent intent = getIntent();
         String strMsg = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-        TextView ctrlText = findViewById(R.id.textView2);
+        TextView ctrlText = (TextView)findViewById(R.id.textView2);
         ctrlText.setText(strMsg);
         bExit = false;
         thread = null;
