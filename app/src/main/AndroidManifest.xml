@@ -26,7 +26,10 @@
         <service android:name=".MyIntentService" />
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".frameActivity"  android:theme="@style/Theme.AppCompat.NoActionBar" ></activity>
     </application>
 
 </manifest>

@@ -4,38 +4,246 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/activity_bg"
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/title_login"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:layout_height="30dp"
+        android:background="@android:color/background_dark"
+        android:gravity="center"
+        android:text="@string/title_login"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="162dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="120dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
+        app:layout_constraintTop_toBottomOf="@+id/title_login">
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="381dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/top_banner" />
+            android:src="@drawable/top_banner" />
     </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="148dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/corners_login_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:background="@android:color/darker_gray"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageAddr" />
+
+        <TextView
+            android:id="@+id/title_select"
+            android:layout_width="358dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/title_select"
+            android:textColor="#555555"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageSelect"
+            android:layout_width="42dp"
+            android:layout_height="33dp"
+            android:src="@drawable/edit_icon_select"
+            app:layout_constraintBottom_toTopOf="@+id/textView8"
+            app:layout_constraintEnd_toEndOf="@+id/imageAddr"
+            app:layout_constraintStart_toStartOf="@+id/imageAddr"
+            app:layout_constraintTop_toBottomOf="@+id/title_select" />
+
+        <Spinner
+            android:id="@+id/spinnerSel"
+            android:layout_width="309dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageSelect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageSelect"
+            app:layout_constraintTop_toBottomOf="@+id/title_select" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:background="@android:color/darker_gray"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+
+        <TextView
+            android:id="@+id/title_addr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/title_addr"
+            android:textColor="#555555"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <ImageView
+            android:id="@+id/imageAddr"
+            android:layout_width="42dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/edit_icon_server"
+            app:layout_constraintBottom_toTopOf="@+id/title_emple"
+            app:layout_constraintEnd_toEndOf="@+id/imageEmple"
+            app:layout_constraintStart_toStartOf="@+id/imageEmple"
+            app:layout_constraintTop_toBottomOf="@+id/title_addr" />
+
+        <EditText
+            android:id="@+id/edit_addr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="2dp"
+            android:background="@null"
+            android:hint="@string/hint_add"
+            android:maxLength="32"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textColorHint="#707070"
+            android:textSize="@dimen/login_edit_addr"
+            app:layout_constraintBottom_toBottomOf="@+id/imageAddr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageAddr" />
+
+        <TextView
+            android:id="@+id/title_emple"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/title_emple"
+            android:textColor="#555555"
+            android:textSize="11sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageAddr" />
+
+        <ImageView
+            android:id="@+id/imageEmple"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/edit_icon_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_emple" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView_Emple"
+            android:layout_width="301dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="2dp"
+            android:background="@null"
+            android:hint="@string/hint_emp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textColorHint="#707070"
+            android:textSize="@dimen/login_autocom_emp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageEmple"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageEmple" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="18dp"
+        android:background="@android:color/holo_blue_dark"
+        android:onClick="OnLoginClick"
+        android:text="@string/btnLogin"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <ImageView
+        android:id="@+id/imageLogo"
+        android:layout_width="0dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/logo_bottom" />
 
 </android.support.constraint.ConstraintLayout>

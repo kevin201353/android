@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_select_spinner">16dp</dimen>
+    <dimen name="login_edit_addr">16dp</dimen>
+    <dimen name="login_autocom_emp">16dp</dimen>
+</resources>

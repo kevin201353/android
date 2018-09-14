@@ -14,4 +14,29 @@
     <string name="stop">Stop</string>
     <string name="go">Go</string>
     <string name="app_welcome_name">登机桥及桥载设备运行调度手机APP V3.0</string>
+
+
+    <!--登录界面-->
+    <string name="title_login">用户登录</string>
+    <string name="title_select">选择类型</string>
+    <string name="title_addr">服务器地址</string>
+    <string name="title_emple">员工号</string>
+    <string name="btnLogin">登录</string>
+    <!--登录输入框提示-->
+    <string name="hint_add">请输入服务器地址</string>
+    <string name="hint_emp">请输入员工号</string>
+    <string name="hint_spinner">请选择类型</string>
+
+    <!--默认四个员工号补齐-->
+    <string-array name="emp_array">
+        <item>B105</item>
+        <item>B106</item>
+        <item>B107</item>
+    </string-array>
+
+
+    <!--主界面项-->
+    <string name="name_flt">登机桥</string>
+    <string name="state">状态</string>
+    <string name="time">时间</string>
 </resources>
