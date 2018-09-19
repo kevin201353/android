@@ -22,6 +22,7 @@
     <string name="title_addr">服务器地址</string>
     <string name="title_emple">员工号</string>
     <string name="btnLogin">登录</string>
+    <string name="btnLoginCanel">取消登录</string>
     <!--登录输入框提示-->
     <string name="hint_add">请输入服务器地址</string>
     <string name="hint_emp">请输入员工号</string>
