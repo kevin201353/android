@@ -40,4 +40,12 @@
     <string name="name_flt">登机桥</string>
     <string name="state">状态</string>
     <string name="time">时间</string>
+
+    <!--注册界面-->
+    <string name="register">注册</string>
+    <string name="phone">手机号</string>
+    <string name="verify1">验证码</string>
+    <string name="verify2">获取验证码</string>
+    <string name="password">密码</string>
+    <string name="duplicate">重复</string>
 </resources>

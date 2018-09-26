@@ -16,6 +16,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.transform.Result;
 
@@ -34,8 +41,24 @@ public class LoginActivity extends AppCompatActivity {
     private Boolean  bLogining = false;
 
     private Handler handler;
-    private  MyThread mythrd;
-    private  Thread  mthrd;
+    private MyThread mythrd;
+    private Thread  mthrd;
+
+    private String str_addr;
+    private String str_seltype;
+    private String str_employe;
+
+    public String getAddr() {
+        return str_addr;
+    }
+
+    public String getSelType() {
+        return str_seltype;
+    }
+
+    public String getEmploye() {
+        return str_employe;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +86,35 @@ public class LoginActivity extends AppCompatActivity {
         myTask = new MyLoginTask();
     }
 
+    private int LoginTask() {
+        str_addr = address.getText().toString();
+        str_employe = User.getText().toString();
+        str_seltype = strSelType;
+
+        HttpGetter  httpGetter = new HttpGetter();
+        String login_url = httpGetter.MakeUrl(str_addr, 8080);
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        final SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMddhhmmss.SSS");
+        String strSessionToken = sdFormat.format(date);
+
+        StringBuffer url = new StringBuffer(login_url + "/?"); // http连接
+        url.append("cmd=" + Cmd.STR_CMD_REGISTER);
+        url.append("&operatorno=" + str_employe);
+        url.append("&sessionid=" + strSessionToken);
+        url.append("&logtype=" + str_seltype);
+
+        Log.v("Login", "[HttpGetter] login url=" + url.toString());
+        if ( httpGetter.HttpLogin(url.toString()) < 0) {
+            String strUser = httpGetter.getUserName();
+            String strairPort = httpGetter.getStrAirportCode();
+            int  nWorkStates = httpGetter.getnWorkStatus();
+            Log.v("Login",  "User: " + strUser + "airport:" + strairPort + "workstates: " + Integer.toString(nWorkStates));
+        }
+        this.finish();
+        startActivity(new Intent(this, MainActivity.class));
+        return 0;
+    }
     public void OnLoginClick(View view) {
         Button btnLogin = (Button)findViewById(R.id.btnLogin);
         Button btn_cancel = (Button)findViewById(R.id.btn_cancel);
@@ -114,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
             int length = 1;
             while (ncount < 99) {
                 try {
+                    LoginTask();
                     ncount += length;
                     length++;
                     Message msg = new Message();
@@ -144,6 +197,9 @@ public class LoginActivity extends AppCompatActivity {
         mthrd.interrupt();
            // myTask.cancel(true);
        // }
+
+        //send Toast
+        Toast.makeText(this, "you close button!!", Toast.LENGTH_SHORT).show();
     }
 
     public class Spinner2Listener implements android.widget.AdapterView.OnItemSelectedListener {

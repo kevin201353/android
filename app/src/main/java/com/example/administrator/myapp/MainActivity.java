@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MainActivity extends Activity {
 
     public  static final String EXTRA_MESSAGE = ".com.example.app.MESSAGE";
@@ -21,6 +23,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
     public void sendMessage(View view) {
