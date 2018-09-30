@@ -48,4 +48,8 @@
     <string name="verify2">获取验证码</string>
     <string name="password">密码</string>
     <string name="duplicate">重复</string>
+
+    <!--web 测试界面-->
+    <string name="url">http://</string>
+    <string name="gosite">Go</string>
 </resources>

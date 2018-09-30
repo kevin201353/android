@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="login_select_spinner">16dp</dimen>
-    <dimen name="login_edit_addr">16dp</dimen>
-    <dimen name="login_autocom_emp">16dp</dimen>
+    <dimen name="login_select_spinner">16sp</dimen>
+    <dimen name="login_edit_addr">16sp</dimen>
+    <dimen name="login_autocom_emp">16sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

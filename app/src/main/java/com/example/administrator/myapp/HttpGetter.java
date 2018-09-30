@@ -1,12 +1,15 @@
 package com.example.administrator.myapp;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -112,5 +115,55 @@ public class HttpGetter {
             e.printStackTrace();
         }
         return  0;
+    }
+
+    public int upload(String url, String json) {
+        String result = "";
+        BufferedReader reader = null;
+        try {
+            URL ur = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) ur.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(HTTP_LOGINTIMEOUT);
+            connection.setReadTimeout(HTTP_LOGINTIMEOUT);
+            //设置是否向httpURLConnection输出，因为post请求参数要放在http正文内，所以要设置为true
+            connection.setDoOutput(true);
+            //设置是否从httpURLConnection读入，默认是false
+            connection.setDoInput(true);
+            //POST请求不能用缓存，设置为false
+            connection.setUseCaches(false);
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Charset", "UTF-8");
+            connection.setRequestProperty("Content-Type","application/json; charset=UTF-8");
+            connection.setRequestProperty("accept","application/json");
+            // 往服务器里面发送数据
+            if (json != null && !TextUtils.isEmpty(json)) {
+                byte[] writebytes = json.getBytes();
+                // 设置文件长度
+                connection.setRequestProperty("Content-Length", String.valueOf(writebytes.length));
+                OutputStream outwritestream = connection.getOutputStream();
+                outwritestream.write(json.getBytes());
+                outwritestream.flush();
+                outwritestream.close();
+                connection.connect();
+                Log.d("hlhupload", "doJsonPost: conn"+connection.getResponseCode());
+            }
+            if (connection.getResponseCode() == 200) {
+                reader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                result = reader.readLine();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return 0;
     }
 }

@@ -30,29 +30,29 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
                 <!-- Required  显示通知栏 -->
-                <category android:name="org.yuwei.education"/>
+                <category android:name="org.yuwei.education" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
             <!-- Optional -->
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <data android:scheme="package"/>
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
-        <!-- Required SDK 核心功能-->
+        <!-- Required SDK 核心功能 -->
         <!-- 可配置 android:process 参数将 PushService 放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
@@ -61,41 +61,41 @@
             </intent-filter>
         </service>
 
-
         <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <!-- Required SDK 核心功能-->
+        <!-- Required SDK 核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.example.administrator.myapp" />
             </intent-filter>
         </activity>
-        <!-- SDK 核心功能-->
+        <!-- SDK 核心功能 -->
 
-        <!-- User defined.  For test only  用户自定义的广播接收器-->
+
+        <!-- User defined.  For test only  用户自定义的广播接收器 -->
         <receiver
-            android:name="com.example.administrator.myapp.MyRecevier"
-            android:exported="false"
-            android:enabled="true">
+            android:name=".MyRecevier"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!--Required  用户接收SDK消息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!--Required  用户接收SDK通知栏信息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!--Required  用户打开自定义通知栏的intent-->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <category android:name="com.example.administrator.myapp" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
@@ -107,7 +107,6 @@
                 <category android:name="com.example.administrator.myapp" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Welcome"
             android:theme="@style/AppTheme">
@@ -134,10 +133,15 @@
         <activity
             android:name=".frameActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".Regiser"></activity>
+        <activity android:name=".Regiser" />
+
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="a8e95eb9cfbf39fbde57af68"/>
+            android:value="a8e95eb9cfbf39fbde57af68" />
+
+        <activity
+            android:name=".WebActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>
