@@ -1,21 +1,29 @@
 package com.example.administrator.myapp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
@@ -27,8 +35,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.administrator.myapp.dispatch.LinePathView;
 
 import org.json.JSONObject;
 
@@ -48,10 +59,15 @@ public class WebActivity extends AppCompatActivity {
     private final static int PHOTO_REQUEST = 100;
     //private final static int VIDEO_REQUEST = 120;
     private File fileUri;
-    WebView mWebview;
-    WebSettings mWebSettings;
-    TextView beginLoading,mtitle;
+    private WebView mWebview;
+    private WebSettings mWebSettings;
+    private TextView beginLoading,mtitle;
     private Uri imageUri;
+//    private LinePathView mLinePathView;
+//    private PopupWindow  mShowDlg;
+//    private View mShareView;
+
+    private ProgressDialog waitDlg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +93,8 @@ public class WebActivity extends AppCompatActivity {
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setDefaultFontSize(12);
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        mWebview.loadUrl(url_air);
+        mWebview.loadUrl(url_test);
+
         //在Js类里实现javascript想调用的方法(H5调用android)，"jsObj"就是这个接口的别名
         mWebview.addJavascriptInterface(new Js(), "jsObj");
         //设置不用系统浏览器打开,直接显示在当前Webview
@@ -220,7 +237,9 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //android调用H5代码
-                mWebview.loadUrl("javascript: cameraResult('"+ result.toString() + "')");
+                String strHeader = "data:image/jpg;base64,";//必须加上“data:image/png;base64”图片的数据格式H5才能识别出来
+                strHeader += result;
+                mWebview.loadUrl("javascript: cameraResult('"+ strHeader.toString() + "')");
             }
         }, 1000);
     }
@@ -229,6 +248,10 @@ public class WebActivity extends AppCompatActivity {
         @JavascriptInterface
         public void goAppCamera() {
             takePhoto();
+        }
+        @JavascriptInterface
+        public void goSigned() {
+            onSigned();
         }
     }
 
@@ -287,6 +310,7 @@ public class WebActivity extends AppCompatActivity {
                 Log.d("it520", "bitmapToBase64被调了...");
                 String str = bitmapToBase64(compressBitmap);
                 setPlatformType(str);
+                upLoad(str);
             }
         }else {
             Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
@@ -295,6 +319,7 @@ public class WebActivity extends AppCompatActivity {
             Log.d("it520", "else中的bitmapToBase64被调了...");
             String str = bitmapToBase64(compressBitmap);
             setPlatformType(str);
+            upLoad(str);
         }
     }
     public void takePhoto() {
@@ -324,7 +349,7 @@ public class WebActivity extends AppCompatActivity {
 
     // bitmap转base64
     public static String bitmapToBase64(Bitmap bitmap) {
-        String result = "data:image/jpg;base64,";//必须加上“data:image/png;base64”图片的数据格式H5才能识别出来
+        String result = "";
         ByteArrayOutputStream bos = null;
         try {
             if (null != bitmap) {
@@ -333,7 +358,7 @@ public class WebActivity extends AppCompatActivity {
                 bos.flush();// 将bos流缓存在内存中的数据全部输出，清空缓存
                 bos.close();
                 byte[] bitmapByte = bos.toByteArray();
-                result += Base64.encodeToString(bitmapByte, Base64.DEFAULT);
+                result = Base64.encodeToString(bitmapByte, Base64.DEFAULT);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -387,10 +412,14 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    /*
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("jpg", strBase64);
+                    jsonObject.put("Jpg", "1123");
                     HttpGetter http = new HttpGetter();
                     http.upload("http://192.168.0.238:8080/upload",  jsonObject.toString());
+                    */
+                    HttpGetter http = new HttpGetter();
+                    http.HttpPost(Cmd.STR_CMD_UPLOAD_PHOTO, strBase64, 3000);
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -398,4 +427,120 @@ public class WebActivity extends AppCompatActivity {
         }).start();
         return true;
     }
+
+
+    /**
+     * 处理签名
+     */
+    public void onSigned() {
+        //singed
+        View mShareView = LayoutInflater.from(this).inflate(R.layout.showsignature, null);
+        final LinePathView mLinePathView = (LinePathView) mShareView.findViewById(R.id.PAINT_SIGN);
+        mLinePathView.setBackColor(Color.WHITE);
+        mLinePathView.setPaintWidth(10);
+        mLinePathView.setPenColor(Color.BLACK);
+        mLinePathView.clear();
+
+        final PopupWindow mShowDlg = new PopupWindow(mShareView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, false);
+        mShowDlg.setOutsideTouchable(true);
+        mShowDlg.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        mShowDlg.setFocusable(true);
+
+        mShareView.findViewById(R.id.BTN_SIGN_CANCEL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShowDlg.dismiss();
+            }
+        });
+
+        mShareView.findViewById(R.id.BTN_SIGN_CLEAR).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLinePathView.clear();
+            }
+        });
+
+        mShareView.findViewById(R.id.BTN_SIGN_OK).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mLinePathView.getTouched()) {
+                    try {
+                        String strpath ;
+                        strpath = getExternalFilesDir("/") + "/signature1.png";
+                        mLinePathView.save(strpath, true, 10);
+                        setResult(100);
+                        mShowDlg.dismiss();
+                        UploadSignPng(strpath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(WebActivity.this, "您没有签名~", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mShowDlg.showAtLocation(mShareView.getRootView(), Gravity.CENTER, 0, 0);
+        mLinePathView.clear();
+    }
+
+
+    /**
+      * 处理图片上传
+     */
+    private String strLocalPath = "";
+    public void UploadSignPng(String strpath)
+    {
+        waitDlg = new ProgressDialog(this);
+        waitDlg.setMessage("正在上传签名，请稍候..");
+        waitDlg.show();
+
+        strLocalPath = strpath;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // /* sessionid=094505.321&cmd=B2&CmbID=12345&OperatorNo=A030&BridgeName=203A */
+                String param = "&CmbID=" + "1102" + "&OperatorNo=" + "lisi" + "&pictype=png";
+                HttpGetter httpGet = new HttpGetter();
+                boolean res = httpGet.uploadFile(param, strLocalPath, "1102" + ".png");
+
+                //String param = "&operatorno=" +LoginActivity.strWorkerID + "&bridgename=" + mSchd.strBridgeName + "&cmbid=" + mSchd.nCmbID;
+                //String httpresult = mContext.mHttpGet.HttpGet(Cmd.STR_CMD_GET_DEV_CHARGE, param);
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_UPLOAD_FINISH, res ? strLocalPath : null));
+            }
+        }).start();
+    }
+
+    private String strSignPic = "";
+    private static final int MSG_LOAD_SPEC_FINISH = 2001;
+    private static final int MSG_UPLOAD_FINISH = 2002;
+    private static final int MSG_GETHTTP_PIC_FINISH = 2003;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(@NonNull  Message msg) {
+            super.handleMessage(msg);
+            String loadresult;
+            switch (msg.what) {
+                case MSG_UPLOAD_FINISH:
+                    waitDlg.dismiss();
+                    loadresult = (String) msg.obj;
+                    if (loadresult == null) {
+                        Toast.makeText(WebActivity.this, "加载失败，请稍后再试..", Toast.LENGTH_LONG).show();
+
+                    }
+                    break;
+                case MSG_LOAD_SPEC_FINISH:
+                    waitDlg.dismiss();
+                    loadresult = (String) msg.obj;
+                    if (loadresult == null) {
+                        Toast.makeText(WebActivity.this, "上传失败，请稍后再试..", Toast.LENGTH_LONG).show();
+
+                    }
+                    break;
+                case MSG_GETHTTP_PIC_FINISH:
+                    break;
+            }
+        }
+    };
 }

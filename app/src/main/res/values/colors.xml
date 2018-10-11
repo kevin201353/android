@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
     <color name="legacy_primary_dark">#000000</color>
+    <color name="system_titlebar_bg">#253238</color>
 </resources>

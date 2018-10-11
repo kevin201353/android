@@ -10,6 +10,10 @@ public class Cmd {
     /* 注册指令 */
     public static final String STR_CMD_REGISTER 			= "76";
 
+    public static final String STR_CMD_UPLOAD_SIGNIMG       = "77";
+
+    public static final String STR_CMD_UPLOAD_PHOTO       = "78";
+
     public static final int ERROR_CODE_CONNSERVICE_SUCCESS  = 0;   // 成功
     public static final int ERROR_CODE_CONNSERVICE_TIMEOUT  = -1;  // 连接超时
     public static final int ERROR_CODE_CONNSERVICE_REGFAIL  = -2;  // 登录失败

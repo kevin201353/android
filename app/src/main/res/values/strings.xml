@@ -52,4 +52,10 @@
     <!--web 测试界面-->
     <string name="url">http://</string>
     <string name="gosite">Go</string>
+
+    <!--签名板-->
+    <string name="signed">签名板</string>
+    <string name="sig_cancel">取消</string>
+    <string name="sig_clear">清除</string>
+    <string name="sig_ok">确定</string>
 </resources>

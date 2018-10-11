@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/system_titlebar_bg">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/PAINT_SIGN_TITLE"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_title_height"
+            android:background="@color/system_titlebar_bg"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:text="@string/signed"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/shadow_down"/>
+
+        <com.example.administrator.myapp.dispatch.LinePathView
+            android:id="@+id/PAINT_SIGN"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginTop="30dp"
+            android:background="#FFFFFF">
+
+        </com.example.administrator.myapp.dispatch.LinePathView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pop_buttonbar_height"
+            android:layout_marginTop="30dp"
+            style="@style/button_bar">
+
+            <Button
+                android:id="@+id/BTN_SIGN_CANCEL"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/sig_cancel"
+                style="@style/button_group_cancel"/>
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/BTN_SIGN_CLEAR"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/sig_clear"
+                style="@style/button_group_cancel"/>
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/BTN_SIGN_OK"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/sig_ok"
+                style="@style/button_group_ok"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
