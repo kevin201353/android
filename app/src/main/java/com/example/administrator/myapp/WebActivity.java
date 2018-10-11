@@ -8,7 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -51,6 +54,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class WebActivity extends AppCompatActivity {
 
@@ -305,6 +311,7 @@ public class WebActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 Bitmap  bitmap = (Bitmap) bundle.get("data"); //get bitmap
+                bitmap = drawDate2Bitmap(bitmap);
                 saveBitmapFile(bitmap);
                 Bitmap compressBitmap = compressImage(bitmap);
                 Log.d("it520", "bitmapToBase64被调了...");
@@ -314,6 +321,7 @@ public class WebActivity extends AppCompatActivity {
             }
         }else {
             Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+            bitmap = drawDate2Bitmap(bitmap);
             saveBitmapFile(bitmap);
             Bitmap compressBitmap = compressImage(bitmap);
             Log.d("it520", "else中的bitmapToBase64被调了...");
@@ -326,6 +334,37 @@ public class WebActivity extends AppCompatActivity {
         PhotoUtils.takePicture(WebActivity.this, imageUri, PHOTO_REQUEST);
     }
 
+
+    public static Bitmap drawDate2Bitmap(Bitmap bitmap) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        String date = sdf.format(new Date());
+        Bitmap.Config bitmapConfig = bitmap.getConfig();
+        // set default bitmap config if none
+        if (bitmapConfig == null) {
+            bitmapConfig = Bitmap.Config.ARGB_8888;
+        }
+        bitmap = bitmap.copy(bitmapConfig, true); // 获取可改变的位图
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        paint.setColor(Color.RED);
+        // text size in pixels
+        paint.setTextSize(8);
+        // text shadow
+        // paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+        Rect bounds = new Rect();
+        paint.getTextBounds(date, 0, date.length(), bounds);
+        String location = "南方航空 ";
+        Rect bounds2 = new Rect();
+        paint.getTextBounds(location, 0, location.length(), bounds2);
+        int x = (bitmap.getWidth() - bounds.width());
+        canvas.drawText(date, x - 10, bitmap.getHeight() - 10, paint);
+        x = (bitmap.getWidth() - bounds.width() - bounds2.width());
+        canvas.drawText(location, x - 15, bitmap.getHeight() - 10, paint);
+        canvas.save();
+        return bitmap;
+    }
+
     ////img deal
     /**
      * 图片压缩
@@ -334,7 +373,7 @@ public class WebActivity extends AppCompatActivity {
      */
     public Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 60, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
 //因为获取到的ByteArrayOutputStream大小基本为50几kb，所以不用压缩，所以以下代码注释掉
 //        int options = 90;
 //        while (baos.toByteArray().length / 1024 > 200) {// 循环判断如果压缩后图片是否大于200kb,大于继续压缩
@@ -354,7 +393,7 @@ public class WebActivity extends AppCompatActivity {
         try {
             if (null != bitmap) {
                 bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos);// 将bitmap放入字节数组流中
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);// 将bitmap放入字节数组流中
                 bos.flush();// 将bos流缓存在内存中的数据全部输出，清空缓存
                 bos.close();
                 byte[] bitmapByte = bos.toByteArray();
@@ -396,7 +435,7 @@ public class WebActivity extends AppCompatActivity {
             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + SystemClock.currentThreadTimeMillis() + ".jpg");
             FileOutputStream fos= null;
             fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,60, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100, fos);
         }catch (Exception e)
         {
             e.printStackTrace();
