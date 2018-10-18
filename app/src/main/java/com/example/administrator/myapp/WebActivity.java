@@ -1,29 +1,39 @@
 package com.example.administrator.myapp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Size;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -34,6 +44,8 @@ import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -50,21 +62,28 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class WebActivity extends AppCompatActivity {
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private final static String url_air = "http://192.168.0.120:1880/gse/pages/indexA320.html";
     private final static String url_test = "http://192.168.0.238:8080/input.html";
     private final static int PHOTO_REQUEST = 100;
     //private final static int VIDEO_REQUEST = 120;
     private File fileUri;
+    private File fileDir;
     private WebView mWebview;
     private WebSettings mWebSettings;
     private TextView beginLoading,mtitle;
@@ -78,9 +97,12 @@ public class WebActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
-
-        fileUri = new File(Environment.getExternalStorageDirectory().getPath() + "/" + SystemClock.currentThreadTimeMillis() + ".jpg");
-        //imageUri = Uri.fromFile(fileUri);
+        fileDir = new File(Environment.getExternalStorageDirectory().getPath() + "/" +  "GsePhoto");
+        if ( !fileDir.exists()){
+            fileDir.mkdir();
+        }
+        fileUri = new File(fileDir.getPath() + "/" + SystemClock.currentThreadTimeMillis() + ".jpg");
+        imageUri = Uri.fromFile(fileUri);
         mWebview = (WebView) findViewById(R.id.webView1);
         //beginLoading = (TextView) findViewById(R.id.text_beginLoading);
         //mtitle = (TextView) findViewById(R.id.title);
@@ -188,6 +210,30 @@ public class WebActivity extends AppCompatActivity {
                 //beginLoading.setText("结束加载了");
 
             }
+
+
+//            @Override
+//            public WebResourceResponse shouldInterceptRequest (WebView view, WebResourceRequest request) {
+//                FileInputStream input;
+//                String url = request.getUrl().toString();
+//                    String key = "http://androidimg";
+//                    /*如果请求包含约定的字段 说明是要拿本地的图片*/
+//                    if (url.contains(key)) {
+//                        String imgPath = url.replace(key, "");
+//                        Log.v("本地图片路径：", imgPath.trim());
+//                        try {
+//                            /*重新构造WebResourceResponse  将数据已流的方式传入*/
+//                            input = new FileInputStream(new File(imgPath.trim()));
+//                            WebResourceResponse response = new WebResourceResponse("image/jpg", "UTF-8", input);
+//                            /*返回WebResourceResponse*/
+//                            return response;
+//                        } catch (FileNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                }
+//                return super.shouldInterceptRequest(view, request);
+//            }
+
         });
 
         /*
@@ -261,76 +307,144 @@ public class WebActivity extends AppCompatActivity {
         }
     }
 
+    //将图片文件添加至相册（便于浏览）
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(imageUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == PHOTO_REQUEST ) {
-//            Uri[] results = null;
-//            if (resultCode == Activity.RESULT_OK) {
-//                if (intent == null) {
-//                    results = new Uri[]{imageUri};
-//                } else {
-//
-//                }
-//                Bitmap bitmap = BitmapFactory.decodeFile(results[0].getPath());
-//                Bitmap compressBitmap = compressImage(bitmap);
-//                Log.d("it520", "else中的bitmapToBase64被调了...");
-//                String str = bitmapToBase64(compressBitmap);
-//                setPlatformType(str);
-//            }
-//        }
-        /*
-        if (requestCode == PHOTO_REQUEST ) {
-            Uri[] results = null;
-            if (resultCode == Activity.RESULT_OK) {
-                if (intent == null) {
-                    results = new Uri[]{imageUri};
-                } else {
-                    String dataString = intent.getDataString();
-                    ClipData clipData = intent.getClipData();
-                    if (clipData != null) {
-                        results = new Uri[clipData.getItemCount()];
-                        for (int i = 0; i < clipData.getItemCount(); i++) {
-                            ClipData.Item item = clipData.getItemAt(i);
-                            results[i] = item.getUri();
-                        }
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == PHOTO_REQUEST){
+            if (intent != null) {
+                Uri uri = intent.getData();
+                if(uri == null){
+                    Bundle bundle = intent.getExtras(); //从data中取出传递回来缩略图的信息，图片质量差，适合传递小图片
+                    if (bundle != null) {
+                        Bitmap bitmap = (Bitmap) bundle.get("data"); //将data中的信息流解析为Bitmap类型
+                        bitmap = drawDate2Bitmap(bitmap);
+                        saveBitmapFile(bitmap);
+                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
+                        Bitmap compressBitmap = PhotoUtils.compressImage(bitmap);
+                        Log.d("it520", "uri == null, bitmapToBase64被调了...");
+                        String str = bitmapToBase64(compressBitmap);
+                        setPlatformType(str);
+                        //upLoad(str);
                     }
-
-                    if (dataString != null)
-                        results = new Uri[]{Uri.parse(dataString)};
+                }else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
+                    bitmap = drawDate2Bitmap(bitmap);
+                    saveBitmapFile(bitmap);
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
+                    Bitmap compressBitmap = PhotoUtils.compressImage(bitmap);
+                    Log.d("it520", "uri != null, else中的bitmapToBase64被调了...");
+                    String str = bitmapToBase64(compressBitmap);
+                    setPlatformType(str);
+                    //upLoad(str);
                 }
-            }
-        }
-        //mUploadCallbackAboveL.onReceiveValue(results);
-        //mUploadCallbackAboveL = null;
-        */
+            } //if (intent != null)
+            else {
 
-        ///new 2 method
+                /*
+                int permission = ActivityCompat.checkSelfPermission(WebActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        Uri uri = intent.getData();
-        if(uri == null){
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                Bitmap  bitmap = (Bitmap) bundle.get("data"); //get bitmap
-                bitmap = drawDate2Bitmap(bitmap);
-                saveBitmapFile(bitmap);
-                Bitmap compressBitmap = compressImage(bitmap);
-                Log.d("it520", "bitmapToBase64被调了...");
-                String str = bitmapToBase64(compressBitmap);
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    // We don't have permission so prompt the user
+                    ActivityCompat.requestPermissions(WebActivity.this, PERMISSIONS_STORAGE,
+                           REQUEST_EXTERNAL_STORAGE);
+                }*/
+
+                String path = imageUri.getPath();
+                Bitmap bitmap = null;
+                try{
+                    //bitmap = this.decodeFile(path);
+                    bitmap = PhotoUtils.getBitmapFormUri(this, imageUri);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+                Bitmap compressBitmap = PhotoUtils.compressImage(bitmap);
+                Bitmap bitmap2 = drawDate2Bitmap(compressBitmap);
+                Log.d("it520", "intent == null, else中的bitmapToBase64被调了...");
+                String str = bitmapToBase64(bitmap2);
                 setPlatformType(str);
+                galleryAddPic(); //将照片添加到相册
                 upLoad(str);
             }
-        }else {
-            Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath());
-            bitmap = drawDate2Bitmap(bitmap);
-            saveBitmapFile(bitmap);
-            Bitmap compressBitmap = compressImage(bitmap);
-            Log.d("it520", "else中的bitmapToBase64被调了...");
-            String str = bitmapToBase64(compressBitmap);
-            setPlatformType(str);
-            upLoad(str);
         }
     }
+
+
+    public void handlerCamera(){
+        CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+        try {
+            String[] CameraIdList = cameraManager.getCameraIdList();
+            //获取可用相机设备列表
+            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(CameraIdList[0]);
+            //在这里可以通过CameraCharacteristics设置相机的功能,当然必须检查是否支持
+            characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
+            StreamConfigurationMap configurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            if (configurationMap != null) {
+                //获取图片输出的尺寸
+                Size[]  size = configurationMap.getOutputSizes(ImageFormat.JPEG);
+                Log.v("setting photo", "1111");
+            }
+
+            Camera  mCameraDevice = android.hardware.Camera.open(0);
+            Camera.Parameters mParameters = mCameraDevice.getParameters();
+            List<Camera.Size> litsize = mParameters.getSupportedPictureSizes();
+            for (int i=0; i<litsize.size();i++){
+                Camera.Size size = litsize.get(i);
+                Log.v("Pic size :", String.valueOf(size.height) + " ---" + String.valueOf(size.width));
+            }
+            mParameters.setJpegQuality(50);
+            mParameters.setPictureSize(1280, 720);
+            mCameraDevice.setParameters(mParameters);
+            mCameraDevice.release();
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 根据 路径 得到 file 得到 bitmap
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    public static Bitmap decodeFile(String filePath) throws IOException{
+        Bitmap b = null;
+        int IMAGE_MAX_SIZE = 600;
+
+        File f = new File(filePath);
+        if (f == null){
+            return null;
+        }
+        //Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+
+        FileInputStream fis = new FileInputStream(f);
+        BitmapFactory.decodeStream(fis, null, o);
+        fis.close();
+
+        int scale = 1;
+        if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
+            scale = (int) Math.pow(2, (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+        }
+
+        //Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        fis = new FileInputStream(f);
+        b = BitmapFactory.decodeStream(fis, null, o2);
+        fis.close();
+        return b;
+    }
+
     public void takePhoto() {
+        //handlerCamera();
         PhotoUtils.takePicture(WebActivity.this, imageUri, PHOTO_REQUEST);
     }
 
@@ -349,18 +463,18 @@ public class WebActivity extends AppCompatActivity {
         // text color - #3D3D3D
         paint.setColor(Color.RED);
         // text size in pixels
-        paint.setTextSize(8);
+        paint.setTextSize(16);
         // text shadow
         // paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
         Rect bounds = new Rect();
         paint.getTextBounds(date, 0, date.length(), bounds);
-        String location = "南方航空 ";
-        Rect bounds2 = new Rect();
-        paint.getTextBounds(location, 0, location.length(), bounds2);
+        //String location = "南方航空 ";
+        //Rect bounds2 = new Rect();
+        //paint.getTextBounds(location, 0, location.length(), bounds2);
         int x = (bitmap.getWidth() - bounds.width());
         canvas.drawText(date, x - 10, bitmap.getHeight() - 10, paint);
-        x = (bitmap.getWidth() - bounds.width() - bounds2.width());
-        canvas.drawText(location, x - 15, bitmap.getHeight() - 10, paint);
+        //x = (bitmap.getWidth() - bounds.width() - bounds2.width());
+        //canvas.drawText(location, x - 15, bitmap.getHeight() - 10, paint);
         canvas.save();
         return bitmap;
     }
@@ -373,14 +487,15 @@ public class WebActivity extends AppCompatActivity {
      */
     public Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-//因为获取到的ByteArrayOutputStream大小基本为50几kb，所以不用压缩，所以以下代码注释掉
-//        int options = 90;
-//        while (baos.toByteArray().length / 1024 > 200) {// 循环判断如果压缩后图片是否大于200kb,大于继续压缩
-//            baos.reset(); // 重置baos即清空baos
-//            image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options，把压缩后的数据存放到baos中
-//            options -= 10;// 每次都减少10
-//        }
+        image.compress(Bitmap.CompressFormat.JPEG, 65, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        //因为获取到的ByteArrayOutputStream大小基本为50几kb，所以不用压缩，所以以下代码注释掉
+        /*
+        int options = 90;
+        while (baos.toByteArray().length / 1024 > 200) {// 循环判断如果压缩后图片是否大于200kb,大于继续压缩
+            baos.reset(); // 重置baos即清空baos
+           image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options，把压缩后的数据存放到baos中
+            options -= 10;// 每次都减少10
+        }*/
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
         return bitmap;
