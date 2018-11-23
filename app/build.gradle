@@ -5,15 +5,15 @@ android {
         config {
             keyAlias 'myapp'
             keyPassword '123456'
-            storeFile file('E:/androidPro/Singed/myapp.jks')
+            storeFile file('E:/androidPro2/Singed/myapp.jks')
             storePassword '123456'
         }
     }
-    compileSdkVersion 24
+    compileSdkVersion 23
     defaultConfig {
         applicationId "com.example.administrator.myapp"
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
