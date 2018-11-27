@@ -658,7 +658,8 @@ public class WebActivity extends AppCompatActivity {
                 String param = "&CmbID=" + "1102" + "&OperatorNo=" + "lisi" + "&pictype=png";
                 HttpGetter httpGet = new HttpGetter();
                 boolean res = httpGet.uploadFile(param, strLocalPath, "1102" + ".png");
-
+                String param2 = "11122";
+                //deal picture upload
                 //String param = "&operatorno=" +LoginActivity.strWorkerID + "&bridgename=" + mSchd.strBridgeName + "&cmbid=" + mSchd.nCmbID;
                 //String httpresult = mContext.mHttpGet.HttpGet(Cmd.STR_CMD_GET_DEV_CHARGE, param);
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_UPLOAD_FINISH, res ? strLocalPath : null));
