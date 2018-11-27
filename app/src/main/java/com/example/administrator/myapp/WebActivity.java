@@ -566,14 +566,17 @@ public class WebActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    /*
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("Jpg", "1123");
+                    jsonObject.put("Sign", "1");
+                    jsonObject.put("Cam", 2);
                     HttpGetter http = new HttpGetter();
-                    http.upload("http://192.168.0.238:8080/upload",  jsonObject.toString());
-                    */
+                    http.uploadJson("http://192.168.0.238:8080/uploadJson",  jsonObject.toString());
+
+                    /*
                     HttpGetter http = new HttpGetter();
                     http.HttpPost(Cmd.STR_CMD_UPLOAD_PHOTO, strBase64, 3000);
+                    */
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
