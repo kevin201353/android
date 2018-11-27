@@ -185,7 +185,7 @@ public class HttpGetter {
     /**
     *  http 上传json 数据
     * */
-    public int upload(String url, String json) {
+    public int uploadJson(String url, String json) {
         Log.v("http upload json: ", json);
         String result = "";
         BufferedReader reader = null;
