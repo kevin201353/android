@@ -567,7 +567,7 @@ public class WebActivity extends AppCompatActivity {
             public void run() {
                 try {
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("Jpg", "1123");
+                    jsonObject.put("Jpg", "1123#DDDDDDDD8888888888888&999999999999999");
                     jsonObject.put("Sign", "1");
                     jsonObject.put("Cam", 2);
                     HttpGetter http = new HttpGetter();
